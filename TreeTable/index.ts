@@ -1,57 +1,123 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import { HelloWorld, IHelloWorldProps } from "./HelloWorld";
 import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { TreeTableComponent, ITreeTableProps } from "./TreeTableComponent";
+import { ProjectTask, UpdatedOrderInfo } from "./types";
 
-export class TreeTable implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-    private notifyOutputChanged: () => void;
+export class TreeTable implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+    private _container: HTMLDivElement;
+    private _notifyOutputChanged: () => void;
+    private _context: ComponentFramework.Context<IInputs>;
+    private _selectedTaskId: string | null = null;
+    private _updatedOrderData: UpdatedOrderInfo[] = [];
+    private _rawTasks: ProjectTask[] = [];
+    private _previousJsonData: string | null | undefined = undefined;
 
-    /**
-     * Empty constructor.
-     */
+
     constructor() {
-        // Empty
+        // PCF constructor
     }
 
-    /**
-     * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
-     * Data-set values are not initialized here, use updateView.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to property names defined in the manifest, as well as utility functions.
-     * @param notifyOutputChanged A callback method to alert the framework that the control has new outputs ready to be retrieved asynchronously.
-     * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
-     */
     public init(
         context: ComponentFramework.Context<IInputs>,
         notifyOutputChanged: () => void,
-        state: ComponentFramework.Dictionary
+        state: ComponentFramework.Dictionary,
+        container: HTMLDivElement
     ): void {
-        this.notifyOutputChanged = notifyOutputChanged;
+        this._context = context;
+        this._container = container;
+        this._notifyOutputChanged = notifyOutputChanged;
+        context.mode.trackContainerResize(true);
+
+        this._previousJsonData = context.parameters.tasksJsonData.raw;
+        this._rawTasks = this.parseTasksFromJson(this._previousJsonData);
+        this.renderReactComponent();
     }
 
-    /**
-     * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
-     * @returns ReactElement root react element for the control
-     */
-    public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: 'Power Apps' };
-        return React.createElement(
-            HelloWorld, props
+    public updateView(context: ComponentFramework.Context<IInputs>): void {
+        this._context = context;
+        const newJsonData = context.parameters.tasksJsonData.raw;
+
+        if (newJsonData !== this._previousJsonData) {
+            this._previousJsonData = newJsonData;
+            this._rawTasks = this.parseTasksFromJson(newJsonData);
+            this.renderReactComponent();
+        }
+    }
+
+    private parseTasksFromJson(jsonString: string | null | undefined): ProjectTask[] {
+        if (!jsonString) {
+            return [];
+        }
+        try {
+            const parsedData = JSON.parse(jsonString) as Partial<ProjectTask>[];
+            if (Array.isArray(parsedData)) {
+                return parsedData.filter(item =>
+                    item &&
+                    typeof item.id === 'string' &&
+                    typeof item.name === 'string' &&
+                    typeof item.displayOrder === 'number' &&
+                    (item.parentId === null || item.parentId === undefined || typeof item.parentId === 'string')
+                ).map(item => ({
+                    id: item.id!,
+                    name: item.name!,
+                    parentId: item.parentId ?? null,
+                    displayOrder: item.displayOrder!,
+                }));
+            }
+            return [];
+        } catch (e) {
+            console.error("Error parsing tasks JSON data:", e);
+            return [];
+        }
+    }
+
+    private renderReactComponent(): void {
+        const props: ITreeTableProps = {
+            tasks: this._rawTasks,
+            onTaskSelect: this.handleTaskSelect,
+            onOrderChange: this.handleOrderChange,
+            initialSelectedTaskId: this._selectedTaskId,
+            allocatedWidth: this._context.mode.allocatedWidth,
+            allocatedHeight: this._context.mode.allocatedHeight,
+        };
+
+        ReactDOM.render(
+            React.createElement(TreeTableComponent, props),
+            this._container
         );
     }
 
-    /**
-     * It is called by the framework prior to a control receiving new data.
-     * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
-     */
+    private handleTaskSelect = (taskId: string | null): void => {
+        if (this._selectedTaskId !== taskId) {
+            this._selectedTaskId = taskId;
+            this._notifyOutputChanged();
+        }
+    };
+
+    private handleOrderChange = (updatedOrders: UpdatedOrderInfo[]): void => {
+        this._updatedOrderData = updatedOrders;
+        this._rawTasks = this._rawTasks.map(task => {
+            const update = updatedOrders.find(u => u.id === task.id);
+            if (update) {
+                return { ...task, displayOrder: update.newOrder };
+            }
+            return task;
+        });
+
+        this._notifyOutputChanged();
+    };
+
     public getOutputs(): IOutputs {
-        return { };
+        const outputs: IOutputs = {
+            selectedTaskId: this._selectedTaskId ?? undefined,
+            updatedOrderData: this._updatedOrderData.length > 0 ? JSON.stringify(this._updatedOrderData) : undefined
+        };
+        this._updatedOrderData = [];
+        return outputs;
     }
 
-    /**
-     * Called when the control is to be removed from the DOM tree. Controls should use this call for cleanup.
-     * i.e. cancelling any pending remote calls, removing listeners, etc.
-     */
     public destroy(): void {
-        // Add code to cleanup control if necessary
+        ReactDOM.unmountComponentAtNode(this._container);
     }
 }

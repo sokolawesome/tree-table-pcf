@@ -7,37 +7,13 @@
     <value>Project Task Tree Table</value>
   </data>
     <data name="TreeTable_Desc_Key" xml:space="preserve">
-    <value>Displays project tasks in a hierarchical tree with drag & drop reordering and selection.</value>
+    <value>Displays project tasks in a hierarchical tree with drag and drop reordering and selection.</value>
   </data>
-    <data name="Tasks_Data_Display_Key" xml:space="preserve">
-    <value>Task Data</value>
+    <data name="Tasks_JSON_Data_Display_Key" xml:space="preserve">
+    <value>Tasks (JSON Data)</value>
   </data>
-    <data name="Tasks_Data_Desc_Key" xml:space="preserve">
-    <value>Collection of msdyn_projecttask records.</value>
-  </data>
-    <data name="Task_ID_Key" xml:space="preserve">
-    <value>Task ID Field</value>
-  </data>
-    <data name="Task_ID_Desc_Key" xml:space="preserve">
-    <value>The field containing the task's unique ID (msdyn_projecttaskid).</value>
-  </data>
-    <data name="Task_Name_Key" xml:space="preserve">
-    <value>Task Name Field</value>
-  </data>
-    <data name="Task_Name_Desc_Key" xml:space="preserve">
-    <value>The field containing the task's name (msdyn_name).</value>
-  </data>
-    <data name="Parent_Task_ID_Key" xml:space="preserve">
-    <value>Parent Task ID Field</value>
-  </data>
-    <data name="Parent_Task_ID_Desc_Key" xml:space="preserve">
-    <value>The field containing the ID of the parent task (msdyn_parenttaskid).</value>
-  </data>
-    <data name="Display_Order_Key" xml:space="preserve">
-    <value>Display Order Field</value>
-  </data>
-    <data name="Display_Order_Desc_Key" xml:space="preserve">
-    <value>The field containing the task's display order (msdyn_displayorder).</value>
+    <data name="Tasks_JSON_Data_Desc_Key" xml:space="preserve">
+    <value>A JSON string representing the collection of msdyn_projecttask records.</value>
   </data>
     <data name="Selected_Task_ID_Key" xml:space="preserve">
     <value>Selected Task ID</value>

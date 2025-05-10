@@ -10,6 +10,12 @@
   margin-left: 20px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
+  text-align: left;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .tree-node:hover {
