@@ -1,38 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 .tree-table-container {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Montserrat", "Lato";
+  font-size: 20px;
   padding: 10px;
   border: 1px solid #ccc;
-  min-height: 200px;
+  min-height: 100px;
+  overflow-y: auto;
 }
 
-.tree-node {
-  padding: 5px;
-  margin-left: 20px;
-  border-bottom: 1px solid #eee;
+.tree-node-item {
   cursor: pointer;
+  border-bottom: 1px solid #eee;
+  display: flex;
   text-align: left;
-  touch-action: manipulation;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
-.tree-node:hover {
+.tree-node-item:hover {
   background-color: #f0f0f0;
 }
 
-.tree-node.selected {
+.tree-node-item.selected {
   background-color: #cce5ff;
   font-weight: bold;
 }
 
-.dragging-item {
-  opacity: 0.5;
-  background-color: #e0e0e0;
+.select-all-node .task-name {
+  font-weight: bold;
 }
 
-.drop-target-highlight {
-  background-color: #d0f0d0 !important;
-  outline: 2px dashed green;
+.node-content-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.task-name {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  margin-right: 5px;
+}
+
+.move-buttons-container {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+}
+
+.move-button {
+  background: none;
+  border: 1px solid transparent;
+  color: #666;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+  line-height: 1;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+}
+
+.move-button:hover:not(:disabled) {
+  color: #000;
+  border-color: #ccc;
+  background-color: #f0f0f0;
+}
+
+.move-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.move-button:disabled svg {
+  opacity: 0.5;
+}
+
+.expander {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  min-width: 20px;
+  height: 24px;
+  margin-right: 5px;
+  color: #333;
+  user-select: none;
+  cursor: pointer;
+}
+
+.expander.empty-expander {
+  visibility: hidden;
+}
+
+.selection-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  text-align: center;
+  margin-right: 5px;
+  user-select: none;
 }

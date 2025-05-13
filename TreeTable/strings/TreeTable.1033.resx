@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    </xsd:schema>
-    <data name="TreeTable_Display_Key" xml:space="preserve">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  </xsd:schema>
+  <data name="TreeTable_Display_Key" xml:space="preserve">
     <value>Project Task Tree Table</value>
   </data>
-    <data name="TreeTable_Desc_Key" xml:space="preserve">
+  <data name="TreeTable_Desc_Key" xml:space="preserve">
     <value>Displays project tasks in a hierarchical tree with drag and drop reordering and selection.</value>
   </data>
-    <data name="Tasks_JSON_Data_Display_Key" xml:space="preserve">
+  <data name="Tasks_JSON_Data_Display_Key" xml:space="preserve">
     <value>Tasks (JSON Data)</value>
   </data>
-    <data name="Tasks_JSON_Data_Desc_Key" xml:space="preserve">
+  <data name="Tasks_JSON_Data_Desc_Key" xml:space="preserve">
     <value>A JSON string representing the collection of msdyn_projecttask records.</value>
   </data>
-    <data name="Selected_Task_ID_Key" xml:space="preserve">
-    <value>Selected Task ID</value>
+  <data name="Selected_Task_IDs_Key" xml:space="preserve">
+    <value>Selected Tasks IDs</value>
   </data>
-    <data name="Selected_Task_ID_Desc_Key" xml:space="preserve">
-    <value>Outputs the ID of the currently selected task.</value>
+  <data name="Selected_Task_IDs_Desc_Key" xml:space="preserve">
+    <value>Outputs the IDs of the currently selected tasks.</value>
   </data>
-    <data name="Updated_Order_Data_Key" xml:space="preserve">
+  <data name="Updated_Order_Data_Key" xml:space="preserve">
     <value>Updated Order Data</value>
   </data>
-    <data name="Updated_Order_Data_Desc_Key" xml:space="preserve">
+  <data name="Updated_Order_Data_Desc_Key" xml:space="preserve">
     <value>Outputs JSON data of tasks with updated display order.</value>
   </data>
 </root>
